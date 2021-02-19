@@ -29,7 +29,7 @@ func RunMockServer() {
 	time.Sleep(2 * time.Second)
 
 	go createMockRequest(3, shortProcess, &u1)
-	time.Sleep(1 * time.Second)
+	time.Sleep(6 * time.Second)
 
 	go createMockRequest(4, longProcess, &u1)
 	go createMockRequest(5, shortProcess, &u2)
@@ -51,7 +51,7 @@ func createMockRequest(pid int, fn func(), u *User) {
 }
 
 func shortProcess() {
-	time.Sleep(6 * time.Second)
+	time.Sleep(4 * time.Second)
 }
 
 func longProcess() {
