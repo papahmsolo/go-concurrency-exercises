@@ -36,7 +36,7 @@ func (m *MockProcess) Stop() {
 	}
 
 	fmt.Print("\nStopping process..")
-	for {
+	for i := 0; i < 5; i++ {
 		fmt.Print(".")
 		time.Sleep(1 * time.Second)
 	}

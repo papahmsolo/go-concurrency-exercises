@@ -13,10 +13,39 @@
 
 package main
 
+import (
+	"os"
+	"os/signal"
+)
+
 func main() {
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt)
+	done := make(chan struct{})
+	stopping := false
+
 	// Create a process
 	proc := MockProcess{}
 
 	// Run the process (blocking)
-	proc.Run()
+	go func() {
+		proc.Run()
+		done <- struct{}{}
+	}()
+
+	for {
+		select {
+		case <-stop:
+			if stopping {
+				os.Exit(1)
+			}
+			stopping = true
+			go func() {
+				proc.Stop()
+				done <- struct{}{}
+			}()
+		case <-done:
+			return
+		}
+	}
 }
